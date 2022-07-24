@@ -1,9 +1,10 @@
-import type { NextPage } from "next";
+import type { NextPage, GetServerSideProps } from "next";
 import React, { FC, useEffect, useState } from "react";
+import { useRouter } from "next/router";
 import Head from "next/head";
 import Image from "next/image";
 import styles from "../styles/Home.module.css";
-
+import { Client } from "pg";
 import Grid from "@mui/material/Grid";
 import Button from "@mui/material/Button";
 import Avatar from "@mui/material/Avatar";
@@ -17,6 +18,8 @@ import TopNavigationBar from "../components/TopNavigationBar";
 
 import contract from "../contracts/contract";
 
+import { users } from "../types/users";
+
 type TierProps = { title: string; description: string; price: string };
 
 type UserProps = {
@@ -27,22 +30,28 @@ type UserProps = {
   tiers: TierProps[];
 };
 
-const userData: UserProps = {
-  coverPhoto:
-    "https://images.unsplash.com/photo-1502759683299-cdcd6974244f?auto=format&fit=crop&w=440&h=220&q=60",
-  accountTitle: "Ryan's Account",
-  address: "0xD3feCe23f799D87116cd9F7b38F7738753C481ed",
-  accountDescription:
-    "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam nulla nibh, semper ut erat sed, hendrerit accumsan turpis. Nullam sollicitudin vulputate ante ac tincidunt.",
-  tiers: [
-    { title: "entry", description: "entry one", price: "0.0001" },
-    { title: "inter", description: "tiner one", price: "0.0003" },
-  ],
-};
+// const userData: UserProps = {
+//   coverPhoto:
+//     "https://images.unsplash.com/photo-1502759683299-cdcd6974244f?auto=format&fit=crop&w=440&h=220&q=60",
+//   accountTitle: "Ryan's Account",
+//   address: "0xD3feCe23f799D87116cd9F7b38F7738753C481ed",
+//   accountDescription:
+//     "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam nulla nibh, semper ut erat sed, hendrerit accumsan turpis. Nullam sollicitudin vulputate ante ac tincidunt.",
+//   tiers: [
+//     { title: "entry", description: "entry one", price: "0.0001" },
+//     { title: "inter", description: "tiner one", price: "0.0003" },
+//   ],
+// };
+
+const tiers = [
+  { title: "entry", description: "entry one", price: "0.0001" },
+  { title: "inter", description: "tiner one", price: "0.0003" },
+];
 
 type UserPageProps = {
   account: string | null;
   setAccount: (state: string | null) => void;
+  userDetails: users;
 };
 
 type ContentProps = {
@@ -69,29 +78,37 @@ const exampleContent: ContentProps[] = [
 
 type Permissions = { amount: string; tier: string; timestamp: number };
 
-const UserPage: NextPage<UserPageProps> = ({ account, setAccount }) => {
+const UserPage: NextPage<UserPageProps> = ({
+  userDetails,
+  account,
+  setAccount,
+}) => {
   const [permissions, setPermissions] = useState<Permissions | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
 
-  const TierPricing = userData.tiers.map((el: TierProps, index: number) => (
-    <Tiers
-      tier={index + 1}
-      creator={userData.address}
-      subscriber={account}
-      key={el.title}
-      title={el.title}
-      description={el.description}
-      price={el.price}
-    />
-  ));
+  const TierPricing = tiers.map((el: TierProps, index: number) => {
+    if (!userDetails) return;
+    return (
+      <Tiers
+        tier={index + 1}
+        creator={userDetails.wallet_key}
+        subscriber={account}
+        key={el.title}
+        title={el.title}
+        description={el.description}
+        price={el.price}
+      />
+    );
+  });
 
   const contentMapped = exampleContent.map((el: ContentProps, i: number) => (
     <Content content={el} key={i} permissions={permissions} />
   ));
 
   const checkPermissions = async () => {
+    if (!userDetails) return;
     const data = await contract.methods
-      .Subscriptions(account, userData.address)
+      .Subscriptions(account, userDetails.wallet_key)
       .call();
     setLoading(false);
     setPermissions({
@@ -113,39 +130,41 @@ const UserPage: NextPage<UserPageProps> = ({ account, setAccount }) => {
       </Head>
       <TopNavigationBar account={account} setAccount={setAccount} />
       <div
-        style={{
-          backgroundImage: `url("${userData.coverPhoto}")`,
-          height: "350px",
-          backgroundPosition: "center",
-          backgroundRepeat: "no-repeat",
-          backgroundSize: "cover",
-        }}
+        style={
+          userDetails && {
+            backgroundImage: `url("${userDetails.cover_picture}")`,
+            height: "350px",
+            backgroundPosition: "center",
+            backgroundRepeat: "no-repeat",
+            backgroundSize: "cover",
+          }
+        }
       />
       <Grid sx={{ mt: 2 }} container spacing={2}>
         <Grid xs={4} item>
-          <div style={{ display: "flex", justifyContent: "flex-end" }}>
-            <div
-              style={{
-                width: "60%",
-                display: "flex",
-                flexDirection: "column",
-                alignItems: "center",
-              }}
-            >
-              <Avatar />
-              <h4>{userData.accountTitle}</h4>
-              <p style={{ textAlign: "center" }}>
-                {userData.accountDescription}
-              </p>
+          {userDetails && (
+            <div style={{ display: "flex", justifyContent: "flex-end" }}>
+              <div
+                style={{
+                  width: "60%",
+                  display: "flex",
+                  flexDirection: "column",
+                  alignItems: "center",
+                }}
+              >
+                <Avatar src={userDetails.profile_picture} />
+                <h4>{userDetails.title}</h4>
+                <p style={{ textAlign: "center" }}>{userDetails.bio}</p>
+              </div>
             </div>
-          </div>
+          )}
         </Grid>
         <Grid xs={4} item>
           <div
             style={{
               border: "1px solid #dbdbdb",
               borderRadius: "4px",
-              padding: "10px",
+              padding: "10px 10px 0 10px",
             }}
           >
             {loading && (
@@ -181,6 +200,38 @@ const UserPage: NextPage<UserPageProps> = ({ account, setAccount }) => {
       </Grid>
     </div>
   );
+};
+
+export const getServerSideProps: GetServerSideProps = async ({ params }) => {
+  const id = params?.id;
+  const portNum = parseInt(process.env.PGPORT ? process.env.PGPORT : "");
+  const client = new Client({
+    user: process.env.PGUSER,
+    host: process.env.PGHOST,
+    database: process.env.PGDATABASE,
+    password: process.env.PGPASSWORD,
+    port: portNum,
+  });
+  client.connect();
+  const query = {
+    name: "fetch-user",
+    text: "SELECT * FROM users WHERE slug = ($1)",
+    values: [id],
+  };
+  try {
+    const data = await client.query(query);
+
+    return {
+      props: { userDetails: data.rows[0] },
+    };
+  } catch (err) {
+    console.log(err);
+    return {
+      props: { error: "error" },
+    };
+  } finally {
+    client.end();
+  }
 };
 
 export default UserPage;
