@@ -1,4 +1,5 @@
 import React from "react";
+import type { NextPage, GetServerSideProps } from "next";
 import Box from "@mui/material/Box";
 import Drawer from "@mui/material/Drawer";
 import AppBar from "@mui/material/AppBar";
@@ -17,7 +18,12 @@ import TopNavigationBar from "../components/TopNavigationBar";
 
 const drawerWidth = 240;
 
-const profile = () => {
+type UserPageProps = {
+  account: string | null;
+  setAccount: (state: string | null) => void;
+};
+
+const Profile: NextPage<UserPageProps> = ({ account, setAccount }) => {
   return (
     <Box sx={{ display: "flex" }}>
       <CssBaseline />
@@ -25,7 +31,7 @@ const profile = () => {
         position="fixed"
         sx={{ zIndex: (theme) => theme.zIndex.drawer + 1 }}
       >
-        <TopNavigationBar />
+        <TopNavigationBar account={account} setAccount={setAccount} />
       </AppBar>
       <Drawer
         variant="permanent"
@@ -103,4 +109,4 @@ const profile = () => {
   );
 };
 
-export default profile;
+export default Profile;
