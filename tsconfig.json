@@ -19,7 +19,7 @@
     "next-env.d.ts",
     "**/*.ts",
     "**/*.tsx",
-    "pages/profile",
+    "pages/",
     "contracts/contract.js"
   ],
   "exclude": ["node_modules"]

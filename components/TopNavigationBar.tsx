@@ -1,4 +1,4 @@
-import React from "react";
+import React, { FC } from "react";
 
 import Box from "@mui/material/Box";
 import AppBar from "@mui/material/AppBar";
@@ -9,6 +9,7 @@ import IconButton from "@mui/material/IconButton";
 import Typography from "@mui/material/Typography";
 import SearchIcon from "@mui/icons-material/Search";
 import { styled, alpha } from "@mui/material/styles";
+import { Button } from "@mui/material";
 
 const Search = styled("div")(({ theme }) => ({
   position: "relative",
@@ -52,7 +53,25 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
   },
 }));
 
-const TopNavigationBar = () => {
+type TopNavigationBarProps = {
+  account: string | null;
+  setAccount: (params: string | null) => void;
+};
+
+const TopNavigationBar: FC<TopNavigationBarProps> = ({
+  account,
+  setAccount,
+}) => {
+  const connectHandler = async () => {
+    const { ethereum }: any = window;
+    if (ethereum) {
+      const accounts = await ethereum.request({
+        method: "eth_requestAccounts",
+      });
+      const account = accounts[0];
+      setAccount(account);
+    }
+  };
   return (
     <Box sx={{ flexGrow: 1 }}>
       <AppBar position="static">
@@ -72,7 +91,7 @@ const TopNavigationBar = () => {
             component="div"
             sx={{ flexGrow: 1, display: { xs: "none", sm: "block" } }}
           >
-            MUI
+            Business name
           </Typography>
           <Search>
             <SearchIconWrapper>
@@ -83,6 +102,11 @@ const TopNavigationBar = () => {
               inputProps={{ "aria-label": "search" }}
             />
           </Search>
+          {!account && (
+            <Button sx={{ ml: 2 }} variant="contained" onClick={connectHandler}>
+              Connect
+            </Button>
+          )}
         </Toolbar>
       </AppBar>
     </Box>
