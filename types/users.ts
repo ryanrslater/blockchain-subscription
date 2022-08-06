@@ -7,4 +7,6 @@ export type users = {
   title: string;
   profile_picture: string;
   cover_picture: string;
+  content_creator: boolean;
+  banned: boolean;
 };

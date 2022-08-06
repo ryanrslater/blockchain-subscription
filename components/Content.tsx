@@ -3,17 +3,12 @@ import React, { FC } from "react";
 import styles from "./Content.module.css";
 
 import LockIcon from "@mui/icons-material/Lock";
+import { Permissions } from "../types/Permissions";
+import { ContentType } from "../types/ContentType";
 
-type Permissions = { amount: string; tier: string; timestamp: number };
-type ContentPropsType = {
-  title: string;
-  body: string;
-  image: string;
-  tier: string;
-};
 type ContentProps = {
   permissions: Permissions | null;
-  content: ContentPropsType;
+  content: ContentType;
 };
 
 const Content: FC<ContentProps> = ({ permissions, content }) => {
@@ -37,11 +32,10 @@ const Content: FC<ContentProps> = ({ permissions, content }) => {
       </div>
     );
   }
-  const requiredTied = parseInt(content.tier);
-  const subscribersTier = parseInt(permissions.tier);
+
   return (
     <div>
-      {requiredTied > subscribersTier ? (
+      {content.tier > permissions.tier ? (
         <div className={styles.contentWrapper}>
           <div className={styles.lockedWrapper}>
             <LockIcon />

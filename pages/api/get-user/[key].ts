@@ -5,7 +5,7 @@ import { Client } from "pg";
 
 const handler = async (req: NextApiRequest, res: NextApiResponse) => {
   const portNum = parseInt(process.env.PGPORT ? process.env.PGPORT : "");
-  const { body } = req;
+  const { key } = req.query;
   const client = new Client({
     user: process.env.PGUSER,
     host: process.env.PGHOST,
@@ -18,7 +18,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
   const query = {
     name: "fetch-user-details",
     text: "SELECT * FROM users WHERE wallet_key = $1",
-    values: [body],
+    values: [key],
   };
   try {
     const data = await client.query(query);
