@@ -5,4 +5,6 @@ export type ContentType = {
   tier: number;
   video: string;
   wallet_key: string;
+  id: string;
+  timestamp: number;
 };

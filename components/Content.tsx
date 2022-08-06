@@ -1,7 +1,7 @@
 import React, { FC } from "react";
 
 import styles from "./Content.module.css";
-
+import Paper from "@mui/material/Paper";
 import LockIcon from "@mui/icons-material/Lock";
 import { Permissions } from "../types/Permissions";
 import { ContentType } from "../types/ContentType";
@@ -34,7 +34,7 @@ const Content: FC<ContentProps> = ({ permissions, content }) => {
   }
 
   return (
-    <div>
+    <Paper>
       {content.tier > permissions.tier ? (
         <div className={styles.contentWrapper}>
           <div className={styles.lockedWrapper}>
@@ -50,7 +50,7 @@ const Content: FC<ContentProps> = ({ permissions, content }) => {
           <p>{content.body}</p>
         </div>
       )}
-    </div>
+    </Paper>
   );
 };
 

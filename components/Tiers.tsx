@@ -3,7 +3,7 @@ import React, { FC } from "react";
 import Web3 from "web3";
 
 import styles from "./Tiers.module.css";
-
+import Paper from "@mui/material/Paper";
 import Button from "@mui/material/Button";
 import Divider from "@mui/material/Divider";
 import contract from "../contracts/contract";
@@ -30,7 +30,7 @@ const Tiers: FC<TierProps> = ({
       .send({ from: subscriber, value: Web3.utils.toWei(price) });
   };
   return (
-    <div className={styles.tiersWrapper}>
+    <Paper className={styles.tiersWrapper}>
       <h4 className={styles.tierTitle}>{title}</h4>
       <Divider />
       <p className={styles.tierDescription}>{description}</p>
@@ -43,7 +43,7 @@ const Tiers: FC<TierProps> = ({
       >
         Subscribe
       </Button>
-    </div>
+    </Paper>
   );
 };
 

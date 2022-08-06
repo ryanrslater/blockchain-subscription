@@ -100,7 +100,7 @@ const UserPage: NextPage<UserPageProps> = ({
           }
         }
       />
-      <Grid sx={{ mt: 2 }} container spacing={2}>
+      <Grid sx={{ pt: 2, backgroundColor: "#F0F2F5" }} container spacing={2}>
         <Grid xs={4} item>
           {profileDetails && (
             <div style={{ display: "flex", justifyContent: "flex-end" }}>
@@ -121,13 +121,15 @@ const UserPage: NextPage<UserPageProps> = ({
         </Grid>
         <Grid xs={4} item>
           {profileDetails.wallet_key === walletKey && (
-            <CreatePost tiers={tiers} profileDetails={profileDetails} />
+            <CreatePost
+              walletKey={walletKey}
+              tiers={tiers}
+              profileDetails={profileDetails}
+            />
           )}
           <div
             style={{
-              border: "1px solid #dbdbdb",
-              borderRadius: "4px",
-              padding: "10px 10px 0 10px",
+              paddingTop: "10px",
             }}
           >
             {loading && (
@@ -194,7 +196,7 @@ export const getServerSideProps: GetServerSideProps = async ({ params }) => {
       };
       const contentQuery = {
         name: "fetch-content",
-        text: "SELECT * FROM content WHERE wallet_key = ($1)",
+        text: "SELECT * FROM content WHERE wallet_key = ($1) ORDER BY content.timestamp DESC",
         values: [user.rows[0].wallet_key],
       };
       tiers = await client.query(tierQuery);
