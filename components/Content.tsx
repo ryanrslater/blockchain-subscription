@@ -14,22 +14,22 @@ type ContentProps = {
 const Content: FC<ContentProps> = ({ permissions, content }) => {
   if (!permissions) {
     return (
-      <div className={styles.contentWrapper}>
+      <Paper className={styles.contentWrapper}>
         <div className={styles.lockedWrapper}>
           <LockIcon />
         </div>
         <h6 className={styles.lockedReason}>Subscribe to get access</h6>
-      </div>
+      </Paper>
     );
   }
   if (permissions.timestamp > new Date().getTime()) {
     return (
-      <div className={styles.contentWrapper}>
+      <Paper className={styles.contentWrapper}>
         <div className={styles.lockedWrapper}>
           <LockIcon />
         </div>
         <h6 className={styles.lockedReason}>Your subscription has expired</h6>
-      </div>
+      </Paper>
     );
   }
 
