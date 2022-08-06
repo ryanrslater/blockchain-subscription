@@ -13,6 +13,7 @@ import CircularProgress from "@mui/material/CircularProgress";
 
 import Tiers from "../components/Tiers";
 import Content from "../components/Content";
+import CreatePost from "../components/CreatePost";
 import TopNavigationBar from "../components/TopNavigationBar";
 
 import contract from "../contracts/contract";
@@ -119,6 +120,9 @@ const UserPage: NextPage<UserPageProps> = ({
           )}
         </Grid>
         <Grid xs={4} item>
+          {profileDetails.wallet_key === walletKey && (
+            <CreatePost tiers={tiers} profileDetails={profileDetails} />
+          )}
           <div
             style={{
               border: "1px solid #dbdbdb",

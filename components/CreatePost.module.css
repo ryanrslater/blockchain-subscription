@@ -1,0 +1,29 @@
+.createPostButton {
+    width: 100%;
+    background-color: #f2f2f2;
+    border: 1px solid black;
+    border-radius: 30px;
+    padding: 2px 20px;
+    cursor: pointer;
+  }
+  .createPostWrapper {
+    display: flex;
+    padding: 10px;
+    gap: 10px;
+    align-items: center;
+    margin-bottom: 20px;
+  }
+
+  .modalPaper {
+    width: 50%;
+    margin: 10% auto;
+  }
+
+  .createAPost {
+    padding: 10px;
+    border-bottom: 1px solid #bfbfbf;
+    margin-bottom: 5px;
+  }
+  .form {
+    padding: 10px
+  }
