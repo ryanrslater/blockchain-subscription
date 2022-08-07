@@ -5,6 +5,7 @@ import Paper from "@mui/material/Paper";
 import LockIcon from "@mui/icons-material/Lock";
 import { Permissions } from "../types/Permissions";
 import { ContentType } from "../types/ContentType";
+import Image from "next/image";
 
 type ContentProps = {
   permissions: Permissions | null;
@@ -48,6 +49,15 @@ const Content: FC<ContentProps> = ({ permissions, content }) => {
         <div className={styles.contentWrapper}>
           <h4>{content.title}</h4>
           <p>{content.body}</p>
+          {content.image && (
+            <Image
+              src={content.image}
+              layout="responsive"
+              width="100%"
+              height="100%"
+              alt={`${content.title} ${content.id}`}
+            />
+          )}
         </div>
       )}
     </Paper>

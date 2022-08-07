@@ -55,6 +55,7 @@ const CreatePost: FC<CreatePostProps> = ({
     await post.newPost({ ...content, wallet_key: walletKey });
     if (post.success) {
       setOpen(false);
+      setContent(blankContent);
     }
   };
   const tierOptions = tiers.map((el) => (
