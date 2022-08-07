@@ -9,4 +9,5 @@ export type users = {
   cover_picture: string;
   content_creator: boolean;
   banned: boolean;
+  email: string;
 };

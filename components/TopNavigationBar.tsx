@@ -54,13 +54,13 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
 }));
 
 type TopNavigationBarProps = {
-  account: string | null;
-  setAccount: (params: string | null) => void;
+  walletKey: string | null;
+  setWalletKey: (params: string | null) => void;
 };
 
 const TopNavigationBar: FC<TopNavigationBarProps> = ({
-  account,
-  setAccount,
+  walletKey,
+  setWalletKey,
 }) => {
   const connectHandler = async () => {
     const { ethereum }: any = window;
@@ -69,22 +69,13 @@ const TopNavigationBar: FC<TopNavigationBarProps> = ({
         method: "eth_requestAccounts",
       });
       const account = accounts[0];
-      setAccount(account);
+      setWalletKey(account);
     }
   };
   return (
     <Box sx={{ flexGrow: 1 }}>
-      <AppBar position="static">
+      <AppBar position="fixed" color="inherit">
         <Toolbar>
-          <IconButton
-            size="large"
-            edge="start"
-            color="inherit"
-            aria-label="open drawer"
-            sx={{ mr: 2 }}
-          >
-            <MenuIcon />
-          </IconButton>
           <Typography
             variant="h6"
             noWrap
@@ -102,7 +93,7 @@ const TopNavigationBar: FC<TopNavigationBarProps> = ({
               inputProps={{ "aria-label": "search" }}
             />
           </Search>
-          {!account && (
+          {!walletKey && (
             <Button sx={{ ml: 2 }} variant="contained" onClick={connectHandler}>
               Connect
             </Button>
