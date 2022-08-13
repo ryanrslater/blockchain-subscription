@@ -12,7 +12,7 @@ import { styled, alpha } from "@mui/material/styles";
 import { Button } from "@mui/material";
 import HomeIcon from "@mui/icons-material/Home";
 import PersonIcon from "@mui/icons-material/Person";
-
+import Image from "next/image";
 import { users } from "../types/users";
 
 const Search = styled("div")(({ theme }) => ({
@@ -83,14 +83,9 @@ const TopNavigationBar: FC<TopNavigationBarProps> = ({
     <Box sx={{ flexGrow: 1 }}>
       <AppBar position="fixed" color="inherit">
         <Toolbar>
-          <Typography
-            variant="h6"
-            noWrap
-            component="div"
-            sx={{ flexGrow: 1, display: { xs: "none", sm: "block" } }}
-          >
-            Business name
-          </Typography>
+          <div style={{ flexGrow: 1 }}>
+            <Image src="/logo.png" width={60} height={50} alt="logo" />
+          </div>
           {account && (
             <Fragment>
               <IconButton onClick={() => router.push("/")}>
