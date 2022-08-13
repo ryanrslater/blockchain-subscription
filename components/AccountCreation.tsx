@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, FC, FormEvent } from "react";
 
 import Paper from "@mui/material/Paper";
 import TextField from "@mui/material/TextField";
@@ -22,12 +22,19 @@ const blankUser: users = {
   email: "",
 };
 
-const AccountCreation = () => {
+type AccountCreationProps = { walletKey: string | null };
+
+const AccountCreation: FC<AccountCreationProps> = ({ walletKey }) => {
   const [userDetails, setUserDetails] = useState<users>(blankUser);
-  const post = usePost("");
+  const post = usePost("/api/create-user");
+  const submitHandler = async (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    const newPost = await post.newPost({ user: userDetails, walletKey });
+    console.log(newPost);
+  };
   return (
     <div style={{ backgroundColor: "#F0F2F5", height: "100vh" }}>
-      <div style={{ paddingTop: "10%" }}>
+      <form onSubmit={submitHandler} style={{ paddingTop: "10%" }}>
         <Paper sx={{ width: "80%", m: "0 auto", p: 2 }}>
           <h4>Create your account</h4>
           <p>In order to make the most out of the app, create your account</p>
@@ -80,11 +87,11 @@ const AccountCreation = () => {
             }
             fullWidth
           />
-          <Button fullWidth variant="contained">
+          <Button fullWidth type="submit" variant="contained">
             Create Account
           </Button>
         </Paper>
-      </div>
+      </form>
     </div>
   );
 };

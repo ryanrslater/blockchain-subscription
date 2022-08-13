@@ -1,5 +1,5 @@
-import React, { FC } from "react";
-
+import React, { FC, Fragment } from "react";
+import { useRouter } from "next/router";
 import Box from "@mui/material/Box";
 import AppBar from "@mui/material/AppBar";
 import Toolbar from "@mui/material/Toolbar";
@@ -10,6 +10,10 @@ import Typography from "@mui/material/Typography";
 import SearchIcon from "@mui/icons-material/Search";
 import { styled, alpha } from "@mui/material/styles";
 import { Button } from "@mui/material";
+import HomeIcon from "@mui/icons-material/Home";
+import PersonIcon from "@mui/icons-material/Person";
+
+import { users } from "../types/users";
 
 const Search = styled("div")(({ theme }) => ({
   position: "relative",
@@ -56,12 +60,15 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
 type TopNavigationBarProps = {
   walletKey: string | null;
   setWalletKey: (params: string | null) => void;
+  account: users | null;
 };
 
 const TopNavigationBar: FC<TopNavigationBarProps> = ({
   walletKey,
+  account,
   setWalletKey,
 }) => {
+  const router = useRouter();
   const connectHandler = async () => {
     const { ethereum }: any = window;
     if (ethereum) {
@@ -84,6 +91,16 @@ const TopNavigationBar: FC<TopNavigationBarProps> = ({
           >
             Business name
           </Typography>
+          {account && (
+            <Fragment>
+              <IconButton onClick={() => router.push("/")}>
+                <HomeIcon />
+              </IconButton>
+              <IconButton onClick={() => router.push(`/${account.slug}`)}>
+                <PersonIcon />
+              </IconButton>
+            </Fragment>
+          )}
           <Search>
             <SearchIconWrapper>
               <SearchIcon />

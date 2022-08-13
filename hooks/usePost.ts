@@ -25,6 +25,7 @@ const usePost = (url: string) => {
       if (response.res === "success") {
         setSuccess(true);
         router.replace(router.asPath);
+        return response.res;
       }
     } catch (err) {
       console.log(err);

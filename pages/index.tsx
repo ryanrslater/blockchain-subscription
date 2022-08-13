@@ -3,7 +3,7 @@ import Head from "next/head";
 import Image from "next/image";
 import AccountCreation from "../components/AccountCreation";
 import LoggedOutScreen from "../components/LoggedOutScreen";
-
+import TopNavigationBar from "../components/TopNavigationBar";
 import { users } from "../types/users";
 
 type HomeProps = {
@@ -17,7 +17,7 @@ const Home: NextPage<HomeProps> = ({ walletKey, setWalletKey, account }) => {
       <LoggedOutScreen walletKey={walletKey} setWalletKey={setWalletKey} />
     );
   }
-  if (!account) return <AccountCreation />;
+  if (!account) return <AccountCreation walletKey={walletKey} />;
   return (
     <div>
       <Head>
@@ -26,7 +26,13 @@ const Home: NextPage<HomeProps> = ({ walletKey, setWalletKey, account }) => {
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
-      <main></main>
+      <main>
+        <TopNavigationBar
+          walletKey={walletKey}
+          account={account}
+          setWalletKey={setWalletKey}
+        />
+      </main>
 
       <footer></footer>
     </div>

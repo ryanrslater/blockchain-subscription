@@ -14,18 +14,19 @@ function MyApp({ Component, pageProps }: AppProps) {
       if (ethereum.selectedAddress) {
         setWalletKey(ethereum.selectedAddress);
 
-        // const data = await fetch(`api/get-user/${ethereum.selectedAddress}`);
-        // const res = await data.json();
-        // console.log(res.rows);
-        // if (res.rows.length > 0) {
-        //   setAccount(res.rows[0]);
-        // }
+        const data = await fetch(`api/get-user/${ethereum.selectedAddress}`);
+        const { res } = await data.json();
+
+        if (res.wallet_key) {
+          setAccount(res);
+        }
       }
     }
   };
   useEffect(() => {
     checkAccount();
-  }, []);
+  }, [null, walletKey]);
+
   return (
     <Component
       walletKey={walletKey}
