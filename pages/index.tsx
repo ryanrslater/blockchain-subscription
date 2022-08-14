@@ -4,7 +4,10 @@ import Image from "next/image";
 import AccountCreation from "../components/AccountCreation";
 import LoggedOutScreen from "../components/LoggedOutScreen";
 import TopNavigationBar from "../components/TopNavigationBar";
+import Grid from "@mui/material/Grid";
 import { users } from "../types/users";
+import Avatar from "@mui/material/Avatar";
+import Paper from "@mui/material/Paper";
 
 type HomeProps = {
   walletKey: string | null;
@@ -32,6 +35,30 @@ const Home: NextPage<HomeProps> = ({ walletKey, setWalletKey, account }) => {
           account={account}
           setWalletKey={setWalletKey}
         />
+        <div style={{ marginTop: "60px", padding: "20px" }}>
+          <Grid container spacing={2}>
+            <Grid item xs={3}>
+              <Paper
+                sx={{
+                  display: "flex",
+                  flexDirection: "column",
+                  alignItems: "center",
+                  p: 2,
+                }}
+              >
+                <Avatar src={account.profile_picture} alt="profile pictore" />
+                <p>{account.title}</p>
+                <p>{`${account.first_name} ${account.last_name}`}</p>
+              </Paper>
+            </Grid>
+            <Grid item xs={6}>
+              hi
+            </Grid>
+            <Grid item xs={3}>
+              hi
+            </Grid>
+          </Grid>
+        </div>
       </main>
 
       <footer></footer>
